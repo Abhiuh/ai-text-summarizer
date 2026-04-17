@@ -1,24 +1,35 @@
 const fetch = require('node-fetch');
 
-module.exports = async (req, res) => {
+exports.handler = async function(event, context) {
   // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
   // Handle preflight OPTIONS request
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 204,
+      headers
+    };
   }
 
   // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
   }
 
   try {
     // Parse request body
-    const { text, length = 'medium', mode = 'standard', language = 'en' } = req.body;
+    const body = JSON.parse(event.body);
+    const { text, length = 'medium', mode = 'standard', language = 'en' } = body;
     
     // Validate input
     if (!text || typeof text !== 'string' || text.trim().length === 0) {
@@ -76,9 +87,13 @@ module.exports = async (req, res) => {
     if (!GROQ_API_KEY) {
       // For testing without API key, return a mock response
       console.log('GROQ_API_KEY not found, returning mock response');
-      return res.status(200).json({ 
-        summary: "This is a mock summary since the GROQ API key is not configured. Please set up the GROQ_API_KEY environment variable in your Vercel dashboard." 
-      });
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ 
+          summary: "This is a mock summary since the GROQ API key is not configured. Please set up the GROQ_API_KEY environment variable in your Netlify dashboard." 
+        })
+      };
     }
 
     // Make request to GROQ API
@@ -124,14 +139,22 @@ module.exports = async (req, res) => {
     const summary = data.choices[0].message.content.trim();
     
     // Return successful response
-    return res.status(200).json({ summary });
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ summary })
+    };
 
   } catch (error) {
     console.error('Error:', error.message);
     const statusCode = error.message.includes('API') ? 502 : 400;
     
-    return res.status(statusCode).json({ 
-      error: error.message || 'Failed to summarize text'
-    });
+    return {
+      statusCode,
+      headers,
+      body: JSON.stringify({ 
+        error: error.message || 'Failed to summarize text'
+      })
+    };
   }
 };
