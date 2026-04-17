@@ -80,12 +80,7 @@
 
 
  
- ---
- 
- ## 📽️ Demo & Deliverables
- 
- - **Demo Video Link:** [Paste YouTube or Loom link here]  
- - **Pitch Deck / PPT Link:** [Paste Google Slides / PDF link here]  
+
  
  ---
  
