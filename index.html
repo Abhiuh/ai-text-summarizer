@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SumaRise - Text Summarizer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.299.0/font/lucide.min.css">
+</head>
+<nav class="main-nav">
+    <div class="nav-container">
+        <div class="nav-logo">SumaRise</div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="https://forms.gle/yAYjE3WwEJ7Ueta96" target="_blank">Feedback</a></li>
+            <li><a href="#about" id="about-link">About Us</a></li>
+        </ul>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">
+            <i class="lucide lucide-menu"></i>
+        </button>
+    </div>
+</nav>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="app-header">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-icon">SR</div>
+                    </div>
+                    <div class="logo-text">
+                        <h1>SumaRise</h1>
+                        <p class="tagline">Cut the fluff. Keep the thought.</p>
+                    </div>
+                </div>
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">
+                    <i class="lucide lucide-sun"></i>
+                </button>
+            </div>
+            
+            <div class="input-section">
+                <div class="file-upload">
+                    <label for="file-input" class="file-label">
+                        <i class="lucide lucide-upload"></i> Upload Text/PDF
+                    </label>
+                    <input type="file" id="file-input" accept=".txt,.pdf" class="hidden">
+                </div>
+                
+                <div class="word-count" id="input-word-count">Words: 0</div>
+                
+                <textarea id="input-text" placeholder="Enter or paste your text here..."></textarea>
+                
+                <div class="controls">
+                    <select id="summary-length" class="summary-dropdown">
+                        <option value="short">Short Summary</option>
+                        <option value="medium" selected>Medium Summary</option>
+                        <option value="detailed">Detailed Summary</option>
+                    </select>
+                    
+                    <button id="summarize-btn" class="primary-btn">
+                        <span class="btn-text">Summarize</span>
+                        <div class="loader hidden"></div>
+                    </button>
+                </div>
+                
+                <div class="advanced-settings">
+                    <button id="toggle-advanced" class="text-btn">
+                        <i class="lucide lucide-settings"></i> Advanced Settings
+                    </button>
+                    
+                    <div id="advanced-options" class="hidden">
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <label for="summary-mode">Summary Mode</label>
+                                <select id="summary-mode" class="setting-control">
+                                    <option value="standard" selected>Standard</option>
+                                    <option value="eli5">ELI5 (Simplified)</option>
+                                    <option value="factual">Focus on Facts</option>
+                                    <option value="key-points">Key Takeaways</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label for="language">Language</label>
+                                <select id="language" class="setting-control">
+                                    <option value="auto" selected>Auto Detect</option>
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="it">Italian</option>
+                                    <option value="pt">Portuguese</option>
+                                    <option value="zh">Chinese</option>
+                                    <option value="ja">Japanese</option>
+                                    <option value="ko">Korean</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="history-section">
+                    <button id="toggle-history" class="text-btn">
+                        <i class="lucide lucide-history"></i> View History
+                    </button>
+                    
+                    <div id="history-container" class="hidden">
+                        <div class="history-list" id="history-list">
+                            <div class="empty-history">No previous summaries found</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="result" class="hidden">
+                <div class="result-header">
+                    <h2><i class="lucide lucide-file-text"></i> <span id="summary-type">Summary</span></h2>
+                    <div class="word-count" id="summary-word-count">Words: 0</div>
+                </div>
+                
+                <div id="summary-text"></div>
+                
+                <div class="analytics-container">
+                    <h3><i class="lucide lucide-bar-chart"></i> Analytics</h3>
+                    <div class="analytics-grid">
+                        <div class="analytics-item">
+                            <span class="analytics-label">Word Reduction</span>
+                            <span id="word-reduction" class="analytics-value">0%</span>
+                        </div>
+                        <div class="analytics-item">
+                            <span class="analytics-label">Reading Time Saved</span>
+                            <span id="time-saved" class="analytics-value">0 min</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-takeaways-container">
+                    <h3><i class="lucide lucide-key"></i> Key Takeaways</h3>
+                    <div id="key-takeaways"></div>
+                </div>
+                
+                <div class="summary-actions">
+                    <button id="copy-btn" class="action-btn">
+                        <i class="lucide lucide-copy"></i> Copy
+                    </button>
+                    <button id="download-btn" class="action-btn">
+                        <i class="lucide lucide-download"></i> Download
+                    </button>
+                    <div class="share-dropdown">
+                        <button id="share-btn" class="action-btn">
+                            <i class="lucide lucide-share-2"></i> Share
+                        </button>
+                        <div class="share-options hidden" id="share-options">
+                            <button id="email-share" class="share-option">
+                                <i class="lucide lucide-mail"></i> Email
+                            </button>
+                            <button id="twitter-share" class="share-option">
+                                <i class="lucide lucide-twitter"></i> Twitter
+                            </button>
+                            <button id="linkedin-share" class="share-option">
+                                <i class="lucide lucide-linkedin"></i> LinkedIn
+                            </button>
+                            <button id="facebook-share" class="share-option">
+                                <i class="lucide lucide-facebook"></i> Facebook
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-actions">
+                    <button id="new-summary-btn" class="primary-btn">
+                        <i class="lucide lucide-refresh-cw"></i> New Summary
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id="about" class="about">
+        <div class="about-box">
+            <h2>About Us</h2>
+           <p>Welcome to SumaRise, the innovative platform designed to help you quickly digest and summarize key content with ease. Whether you're a student, professional, or someone looking to save time on reading, SumaRise leverages cutting-edge AI technology to generate clear, concise summaries from any text, document, or web page.</p>
+
+<p>At SumaRise, we understand the challenge of information overload in today’s fast-paced world. Our goal is to simplify complex information and present it in a format that’s easy to understand, so you can focus on what matters most.</p>
+
+<h3>Why Choose SumaRise?</h3>
+<ul>
+  <li><strong>Efficient Summaries:</strong> Get a quick overview of lengthy articles, research papers, and other content without having to read it all.</li>
+  <li><strong>AI-Powered Technology:</strong> Our AI engine intelligently analyzes and extracts key points, ensuring the most relevant information is highlighted.</li>
+  <li><strong>User-Friendly Interface:</strong> Whether you’re using a desktop, tablet, or mobile device, SumaRise provides a smooth, responsive experience tailored for all devices.</li>
+  <li><strong>Customizable Settings:</strong> Adjust the summary length and style to fit your preferences, and make the most of your reading time.</li>
+</ul>
+
+        </div>
+    </section>
+
+    
+    <script src="script.js"></script>
+    <!-- PDF.js library for PDF parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <!-- Language detection library -->
+    <script src="https://cdn.jsdelivr.net/npm/franc@5.0.0/dist/franc.min.js"></script>
+    <!-- ISO 639-1 language codes mapping -->
+    <script src="https://cdn.jsdelivr.net/npm/@cospired/i18n-iso-languages@2.1.2/dist/i18n-iso-languages.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@cospired/i18n-iso-languages@2.1.2/dist/i18n-iso-languages/i18n-iso-languages-en.min.js"></script>
+</body>
+
+</html>
