@@ -26,14 +26,8 @@
  
  ---
  
- ## 🧠 Team & Approach
  
- ### Team Name:  
- `Reboot Rebels`
  
- ### Team Members:  
- - Ayush Dubey (GitHub-https://github.com/AYUSHDUBEY24/ LinkedIn-https://www.linkedin.com/in/ayush-dubey-430a19328/ / Role-leader)  
- - Ishika Garg
  
  
  ### Your Approach:  
