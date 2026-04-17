@@ -1,0 +1,21 @@
+# Netlify configuration for SumaRise
+
+[build]
+  publish = "public"
+  functions = "functions"
+  command = "# no build command needed"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirect API requests to the serverless function
+[[redirects]]
+  from = "/summarize"
+  to = "/.netlify/functions/summarize"
+  status = 200
+
+# Handle SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
